@@ -11,7 +11,7 @@ class ExercisesChapter3Test extends FlatSpec with Matchers {
     sut2(List(1,2,3,4)) should be (1*2*3*4)
   }
 
-  "Exercise 3.13" should "work as foldLeft for associative function" in {
+  "Exercise 3.13" should "work as foldLeft for associative functions" in {
     val sum = (as: List[Int]) => ExercisesChapter3.foldRight[Int, Int](as, 0)((x, y) => x + y)
     val product = (as: List[Int]) => ExercisesChapter3.foldRight[Int, Int](as, 1)((x, y) => x * y)
 

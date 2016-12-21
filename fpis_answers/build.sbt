@@ -1,4 +1,4 @@
-name := "ml_scala"
+name := "fpis_answers"
 
 version := "1.0"
 

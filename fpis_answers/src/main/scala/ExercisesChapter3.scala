@@ -64,7 +64,7 @@ object ExercisesChapter3 {
   def convertToString(as: List[Double]): List[String] = foldRight(as, List.empty[String])((a,b) => a.toString :: b)
 
   // 3.18
-  def map[A,B](as: List[A])(f: A => B): List[B] =foldRight(as, List.empty[B])((a,b) => f(a) :: b)
+  def map[A,B](as: List[A])(f: A => B): List[B] = foldRight(as, List.empty[B])((a,b) => f(a) :: b)
 
   // 3.19
   def filter[A](as: List[A])(f: A => Boolean): List[A] = foldRight(as, List.empty[A])((a,b) => if(f(a)) a :: b else b)
@@ -80,13 +80,45 @@ object ExercisesChapter3 {
   def addPairwise(as: List[Int], bs: List[Int]): List[Int] = (as, bs) match {
     case (Nil, _) => Nil
     case (_, Nil) => Nil
-    case (ah :: at, bh :: bt) => ah+bh :: addPairwise(at, bt)
+    case (ah :: at, bh :: bt) => ah + bh :: addPairwise(at, bt)
   }
 
-  // 3.22
+  // 3.23
   def zipWith[A,B,C](as: List[A], bs: List[B])(f: (A,B) => C): List[C] = (as, bs) match {
     case (Nil, _) => Nil
     case (_, Nil) => Nil
     case (ah :: at, bh :: bt) => f(ah,bh) :: zipWith(at, bt)(f)
   }
+
+
+  sealed trait Tree[+A]
+  case class Leaf[A](value: A) extends Tree[A]
+  case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+
+  // 3.25
+  def size[A](t: Tree[A]): Int = t match {
+    case Leaf(v) => 1
+    case Branch(l, r) => 1+size(l)+size(r)
+  }
+
+  // 3.26
+  def maximum(t: Tree[Int]): Int = t match {
+    case Leaf(v) => v
+    case Branch(l, r) => maximum(l).max(maximum(r))
+  }
+
+  // 3.27
+  def depth[A](t: Tree[A]): Int = t match {
+    case Leaf(v) => 1
+    case Branch(l, r) => 1 + depth(l).max(depth(r))
+  }
+
+  // 3.28
+  def map[A, B](t: Tree[A])(f: A => B): Tree[B] = t match {
+    case Leaf(v) => new Leaf[B](f(v))
+    case Branch(l, r) => new Branch[B](map(l)(f), map(r)(f))
+  }
+
+  // 3.29
+  // ...
 }

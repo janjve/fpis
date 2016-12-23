@@ -1,3 +1,4 @@
+import ExercisesChapter3.{Branch, Leaf, Tree}
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -69,5 +70,34 @@ class ExercisesChapter3Test extends FlatSpec with Matchers {
   "Exercise 3.23" should "add pairwise using zipWith correctly" in {
     val sut = ExercisesChapter3.zipWith[Int,Int,Int](_:List[Int], _:List[Int])((a:Int,b:Int) => a+b)
     sut(List(1,2), List(3,4)) should be (List(4,6))
+  }
+
+  "Exercise 3.25" should "get size correctly for trees" in {
+    val sut = ExercisesChapter3.size[Int](_:Tree[Int])
+    sut(new Branch[Int](new Branch[Int](new Leaf[Int](1), new Leaf[Int](2)), new Leaf[Int](3))) should be (5)
+  }
+
+  "Exercise 3.26" should "get maximum correctly for trees" in {
+    val sut = ExercisesChapter3.maximum(_)
+    sut(new Branch[Int](new Branch[Int](new Leaf[Int](1), new Leaf[Int](2)), new Leaf[Int](3))) should be (3)
+    sut(new Branch[Int](new Branch[Int](new Leaf[Int](3), new Leaf[Int](2)), new Leaf[Int](1))) should be (3)
+    sut(new Branch[Int](new Branch[Int](new Leaf[Int](2), new Leaf[Int](3)), new Leaf[Int](1))) should be (3)
+  }
+
+  "Exercise 3.27" should "get depth correctly for trees" in {
+    val sut = ExercisesChapter3.depth[Int](_:Tree[Int])
+    sut(new Leaf[Int](1)) should be (1)
+    sut(new Branch[Int](new Leaf[Int](1), new Leaf[Int](2))) should be (2)
+    sut(new Branch[Int](new Branch[Int](new Leaf[Int](1), new Leaf[Int](2)), new Leaf[Int](3))) should be (3)
+  }
+
+  "Exercise 3.28" should "map correctly for trees" in {
+    val sut = ExercisesChapter3.map[Int, Int](_:Tree[Int])(x => x+1)
+    sut(new Leaf[Int](1)) should be (new Leaf[Int](2))
+    sut(new Branch[Int](new Leaf[Int](1), new Leaf[Int](2))) should be (new Branch[Int](new Leaf[Int](2), new Leaf[Int](3)))
+
+    val t = new Branch[Int](new Branch[Int](new Leaf[Int](1), new Leaf[Int](2)), new Leaf[Int](3))
+    sut(t) should be (new Branch[Int](new Branch[Int](new Leaf[Int](2), new Leaf[Int](3)), new Leaf[Int](4)))
+    ExercisesChapter3.size(sut(t)) should be (ExercisesChapter3.size(t))
   }
 }

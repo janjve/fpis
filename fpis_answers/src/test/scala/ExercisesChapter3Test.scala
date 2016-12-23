@@ -100,4 +100,17 @@ class ExercisesChapter3Test extends FlatSpec with Matchers {
     sut(t) should be (new Branch[Int](new Branch[Int](new Leaf[Int](2), new Leaf[Int](3)), new Leaf[Int](4)))
     ExercisesChapter3.size(sut(t)) should be (ExercisesChapter3.size(t))
   }
+
+  "Exercise 3.29" should "fold correctly for trees" in {
+    val size = ExercisesChapter3.sizeViaFold[Int](_:Tree[Int])
+    val max = ExercisesChapter3.maximumViaFold(_)
+    val depth = ExercisesChapter3.depthViaFold[Int](_:Tree[Int])
+    val map = ExercisesChapter3.mapViaFold[Int, Int](_:Tree[Int])(x => x+1)
+
+    val t = new Branch[Int](new Branch[Int](new Leaf[Int](1), new Leaf[Int](2)), new Leaf[Int](4))
+    size(t) should be (5)
+    max(t) should be (4)
+    depth(t) should be (3)
+    map(t) should be (new Branch[Int](new Branch[Int](new Leaf[Int](2), new Leaf[Int](3)), new Leaf[Int](5)))
+  }
 }

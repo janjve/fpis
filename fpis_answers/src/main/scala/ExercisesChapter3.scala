@@ -125,8 +125,12 @@ object ExercisesChapter3 {
     case Branch(l, r) => g(fold(l)(f)(g), fold(r)(f)(g))
   }
 
-  def sizeViaFold[A](t: Tree[A]): Int = fold[A,Int](t)(b => 1)((l,r) => l+r+1)
-  def maximumViaFold(t: Tree[Int]): Int = fold[Int,Int](t)(b => b)((l,r) => l.max(r))
-  def depthViaFold[A](t: Tree[A]): Int = fold[A,Int](t)(b => 1)((l,r) => l.max(r) + 1)
-  def mapViaFold[A, B](t: Tree[A])(f: A => B): Tree[B] = fold[A,Tree[B]](t)(a => new Leaf(f(a)))((l,r) => new Branch(l, r))
+  def sizeViaFold[A](t: Tree[A]): Int =
+    fold[A,Int](t)(b => 1)((l,r) => l+r+1)
+  def maximumViaFold(t: Tree[Int]): Int =
+    fold[Int,Int](t)(b => b)((l,r) => l.max(r))
+  def depthViaFold[A](t: Tree[A]): Int =
+    fold[A,Int](t)(b => 1)((l,r) => l.max(r) + 1)
+  def mapViaFold[A, B](t: Tree[A])(f: A => B): Tree[B] =
+    fold[A,Tree[B]](t)(a => new Leaf(f(a)))((l,r) => new Branch(l, r))
 }

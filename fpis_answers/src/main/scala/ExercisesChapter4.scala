@@ -27,6 +27,7 @@ object ExercisesChapter4 {
     def filter(f: A => Boolean): Option[A] =
       this.flatMap(x => if(f(x)) Some(x) else None)
 
+
   }
   case class Some[+A](get: A) extends Option[A]
   case object None extends Option[Nothing]
@@ -38,4 +39,16 @@ object ExercisesChapter4 {
   def variance(xs: Seq[Double]): Option[Double] =
     mean(xs).flatMap(m => mean(xs.map(x => math.pow(x - m, 2))))
 
+  // 4.3
+  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    (a, b) match {
+      case (Some(av), Some(bv)) => Some(f(av, bv))
+      case _ => None
+    }
+
+  // 4.4
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = a match {
+      case h :: t => h.flatMap(a => sequence(t).map(a :: _))
+      case Nil => Some(Nil)
+    }
 }

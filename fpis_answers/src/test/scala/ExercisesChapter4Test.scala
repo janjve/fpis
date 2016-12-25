@@ -25,4 +25,16 @@ import org.scalatest.{FlatSpec, Matchers}
       sut(List(1.0, 1.0, 4.0, 4.0)) should be (Some(2.25))
       sut(List()) should be (None)
     }
+
+    "Exercise 4.3" should "map 2 options correctly" in {
+      val sut = ExercisesChapter4.map2[Int, Int, Int](_: Option[Int], _: Option[Int])((x, y) => x+y)
+      sut(Some(1), Some(2)) should be (Some(3))
+      sut(Some(1), None) should be (None)
+    }
+
+    "Exercise 4.4" should "sequence options correctly" in {
+      val sut = ExercisesChapter4.sequence[Int](_: List[Option[Int]])
+      sut(List(Some(1), Some(2), Some(3))) should be (Some(List(1,2,3)))
+      sut(List(Some(1), Some(2), None)) should be (None)
+    }
 }

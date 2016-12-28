@@ -26,8 +26,6 @@ object ExercisesChapter4 {
 
     def filter(f: A => Boolean): Option[A] =
       this.flatMap(x => if(f(x)) Some(x) else None)
-
-
   }
   case class Some[+A](get: A) extends Option[A]
   case object None extends Option[Nothing]
@@ -51,4 +49,39 @@ object ExercisesChapter4 {
       case h :: t => h.flatMap(a => sequence(t).map(a :: _))
       case Nil => Some(Nil)
     }
+
+  // 4.5
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a.foldRight[Option[List[B]]](Some(Nil))((h,t) => map2(f(h), t)(_::_))
+
+  def sequenceViaTraverse[A](a: List[Option[A]]): Option[List[A]] =
+    traverse[Option[A], A](a)(x => x)
+
+
+  // 4.6
+  trait Either[+E, +A] {
+    def map[B](f: A => B): Either[E, B] = this match {
+      case Right(a) => Right(f(a))
+      case Left(b) => Left(b)
+    }
+    def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] = this match {
+      case Right(a) => f(a)
+      case Left(b) => Left(b)
+    }
+    def orElse[EE >: E,B >: A](b: => Either[EE, B]): Either[EE, B] = this match {
+      case Right(a) => Right(a)
+      case _ => b
+    }
+    def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] =
+      flatMap { case a => b.map { case bb => f(a, bb) } }
+  }
+  case class Left[+E](value: E) extends Either[E, Nothing]
+  case class Right[+A](value: A) extends Either[Nothing, A]
+
+  // 4.7
+  def traverse[E, A, B](as: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
+    as.foldRight[Either[E, List[B]]](Right(Nil))((h,t) => f(h).map2(t)(_::_))
+
+  def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] =
+    traverse[E, Either[E, A], A](es)(x => x)
 }
